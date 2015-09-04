@@ -12,6 +12,7 @@ import AVFoundation
 class ViewController: UIViewController {
     @IBOutlet weak var speedLabel: UILabel!
     @IBOutlet weak var progress: CircleProgress!
+    @IBOutlet weak var startStopButton: UIButton!
     
     var audioPlayer = AVAudioPlayer()
     let calendar = NSCalendar.currentCalendar()
@@ -20,24 +21,37 @@ class ViewController: UIViewController {
     var intervals = [Speed]()
     var total = 0.0
     var timePassed = 0.0
-    var timePassedTimer = NSTimer()
     var currentColor = UIColor.blueColor()
     var updateInterval = 0.5
+    var currentIntervalProgress = 0.0
+    var running = false;
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
         
         AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, error: nil)
         AVAudioSession.sharedInstance().setActive(true, error: nil)
+        
+        timer = NSTimer(timeInterval: updateInterval, target: self, selector: "timerFired", userInfo: nil, repeats: true)
+        
+        //TODOMPM: this needs to work in background execution mode
+        NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSRunLoopCommonModes)
     }
     
-    //TODOMPM - use one timer
     //TODOMPM - add pausing
     //TODOMPM - add mid app stopping
     //TODOMPM - add setting screen (number of loops and warmup)
     //TODOMPM - add finished state
     
     @IBAction func startStopPressed(sender: UIButton) {
+        if (!running) {
+            startRunning()
+        } else {
+            stopRunning();
+        }
+    }
+    
+    func startRunning() {
         if (self.warmup) {
             intervals.append(Speed.Warmup)
         }
@@ -54,28 +68,53 @@ class ViewController: UIViewController {
         
         total = intervals.reduce(0, combine: { $0 + $1.runFor() })
         
-        timerFired()
-        updateProgress()
+        startStopButton.setTitle("Stop", forState: UIControlState.Normal)
+        running = true
+    }
+    
+    func stopRunning() {
+        startStopButton.setTitle("Start", forState: UIControlState.Normal)
+        running = false
+        currentIntervalProgress = 0.0
+        intervals.removeAll(keepCapacity: false)
+        speedLabel.text = "Stopped";
     }
     
     func timerFired() {
-        if let nextInterval = intervals.first {
+        if (running) {
+            updateIntervals()
+            updateProgress()
+        }
+    }
+    
+    func updateIntervals() {
+        if (intervals.count == 0) {
+            return;
+        }
+        
+        let currentInterval = intervals.first!
+        
+        if currentIntervalProgress == 0.0 {
+            currentColor = currentInterval.color()
+            speedLabel.text = currentInterval.description()
+            alertSpeed(currentInterval)
+            currentIntervalProgress += updateInterval
+        } else if currentIntervalProgress > currentInterval.runFor() {
+            currentIntervalProgress = 0.0
             intervals.removeAtIndex(0)
-            currentColor = nextInterval.color()
-            speedLabel.text = nextInterval.description()
-            alertSpeed(nextInterval)
-            
-            timer = NSTimer(timeInterval: nextInterval.runFor(), target: self, selector: "timerFired", userInfo: nil, repeats: false)
-            //TODOMPM: this needs to work in background execution mode
-            NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSRunLoopCommonModes)
+        } else {
+            currentIntervalProgress += updateInterval
         }
     }
     
     func updateProgress() {
-        timePassed += updateInterval
-        progress.pushUpdate((updateInterval*100/total, currentColor))
-        timePassedTimer = NSTimer(timeInterval: updateInterval, target: self, selector: "updateProgress", userInfo: nil, repeats: false)
-        NSRunLoop.mainRunLoop().addTimer(timePassedTimer, forMode: NSRunLoopCommonModes)
+        if running {
+            if let currentInterval = intervals.first {
+                timePassed += updateInterval
+                let percent = currentIntervalProgress / currentInterval.runFor() / total * 100
+                progress.pushUpdate(( percent, currentColor))
+            }
+        }
     }
     
     func alertSpeed(currentSpeed:Speed) {

@@ -52,6 +52,7 @@
                     <connections>
                         <outlet property="progress" destination="fmB-bF-CK7" id="eR3-2O-H6Z"/>
                         <outlet property="speedLabel" destination="H6g-Ne-Afc" id="ohq-eZ-tLQ"/>
+                        <outlet property="startStopButton" destination="D79-Sb-B8q" id="rNy-k8-EoL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
