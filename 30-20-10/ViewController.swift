@@ -39,7 +39,7 @@ class ViewController: UIViewController {
     }
     
     //TODOMPM - add pausing
-    //TODOMPM - add mid app stopping
+    //TODOMPM - add interruption
     //TODOMPM - add setting screen (number of loops and warmup)
     //TODOMPM - add finished state
     
@@ -77,7 +77,8 @@ class ViewController: UIViewController {
         running = false
         currentIntervalProgress = 0.0
         intervals.removeAll(keepCapacity: false)
-        speedLabel.text = "Stopped";
+        progress.clear()
+        speedLabel.text = "Stopped"
     }
     
     func timerFired() {
