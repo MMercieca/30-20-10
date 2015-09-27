@@ -49,7 +49,7 @@ class ViewController: UIViewController {
     
     //TODOMPM - add interruption
     //TODOMPM - add setting screen (number of loops and warmup)
-    //TODOMPM - add finished state
+    //TODOMPM - test finished state
     //TODOMPM - Add background execution mode
     
     @IBAction func startPressed(sender: UIButton) {
@@ -78,6 +78,7 @@ class ViewController: UIViewController {
         stopButton.hidden = true
         pauseButton.hidden = true
         startStopButton.hidden = false
+        speedLabel.text = ""
         reset()
     }
 
@@ -106,8 +107,15 @@ class ViewController: UIViewController {
         currentIntervalProgress = 0.0
         intervals.removeAll(keepCapacity: false)
         progress.clear()
-        speedLabel.text = ""
         mode = Mode.Stopped
+    }
+    
+    func finish() {
+        speedLabel.text = "Finished"
+        alertSpeed(Speed.Jog)
+        alertSpeed(Speed.Run)
+        alertSpeed(Speed.Sprint)
+        reset();
     }
     
     func timerFired() {
@@ -143,6 +151,8 @@ class ViewController: UIViewController {
                 timePassed += updateInterval
                 let percent = currentIntervalProgress / currentInterval.runFor() / total * 100
                 progress.pushUpdate(( percent, currentColor))
+            } else {
+                finish()
             }
         }
     }
