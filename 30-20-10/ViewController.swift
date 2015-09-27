@@ -43,14 +43,18 @@ class ViewController: UIViewController {
         
         timer = NSTimer(timeInterval: updateInterval, target: self, selector: "timerFired", userInfo: nil, repeats: true)
         
-        //TODOMPM: this will likely need to be updated for background execution mode
         NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSRunLoopCommonModes)
     }
     
-    //TODOMPM - add interruption
+    //TODOMPM - Add background execution mode - it doesn't look like this app meets the criteria for background 
+    //          execution mode.  
+    //          See: https://developer.apple.com/library/ios/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/BackgroundExecution/BackgroundExecution.html
+    //          I might be able to hack around it, but I'll put that on the back burner for now.
+    //          Of course, if I deliberately hack around it the app may just get rejected from the app store.
+    //TODOMPM - add interruption - App can't run in background so this likely isn't necessary
     //TODOMPM - add setting screen (number of loops and warmup)
     //TODOMPM - test finished state
-    //TODOMPM - Add background execution mode
+    
     
     @IBAction func startPressed(sender: UIButton) {
         mode = Mode.Running
