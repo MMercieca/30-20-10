@@ -18,6 +18,7 @@
 		C10385F61B7E6B390010B021 /* c.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C10385F31B7E6B390010B021 /* c.mp3 */; };
 		C10385F91B7E6EF00010B021 /* Speed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10385F81B7E6EF00010B021 /* Speed.swift */; };
 		C18892781B90E33400A3909A /* CircleProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18892771B90E33400A3909A /* CircleProgress.swift */; };
+		C195C2711B9A1AD900EF82FE /* Mode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C195C2701B9A1AD900EF82FE /* Mode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		C10385F31B7E6B390010B021 /* c.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = c.mp3; path = sounds/c.mp3; sourceTree = "<group>"; };
 		C10385F81B7E6EF00010B021 /* Speed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Speed.swift; sourceTree = "<group>"; };
 		C18892771B90E33400A3909A /* CircleProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CircleProgress.swift; path = ../../../CircleProgress/CircleProgress/CircleProgress/CircleProgress.swift; sourceTree = "<group>"; };
+		C195C2701B9A1AD900EF82FE /* Mode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 				C10385CF1B7E5F730010B021 /* Supporting Files */,
 				C10385F81B7E6EF00010B021 /* Speed.swift */,
 				C18892771B90E33400A3909A /* CircleProgress.swift */,
+				C195C2701B9A1AD900EF82FE /* Mode.swift */,
 			);
 			path = "30-20-10";
 			sourceTree = "<group>";
@@ -179,6 +182,8 @@
 		C10385C41B7E5F730010B021 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = "Mutually Human";
 				TargetAttributes = {
@@ -240,6 +245,7 @@
 			files = (
 				C10385F91B7E6EF00010B021 /* Speed.swift in Sources */,
 				C10385D41B7E5F730010B021 /* ViewController.swift in Sources */,
+				C195C2711B9A1AD900EF82FE /* Mode.swift in Sources */,
 				C18892781B90E33400A3909A /* CircleProgress.swift in Sources */,
 				C10385D21B7E5F730010B021 /* AppDelegate.swift in Sources */,
 			);

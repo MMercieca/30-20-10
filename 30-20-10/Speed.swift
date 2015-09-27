@@ -47,16 +47,16 @@ enum Speed: Int {
         }
     }
     
-    func soundUrl() -> NSURL? {
+    func soundUrl() -> NSURL {
         switch self {
         case .Jog,
              .Warmup,
              .Break:
-            return NSBundle.mainBundle().URLForResource("a", withExtension: "mp3")
+            return NSBundle.mainBundle().URLForResource("a", withExtension: "mp3")!
         case .Run:
-            return NSBundle.mainBundle().URLForResource("c", withExtension: "mp3")
+            return NSBundle.mainBundle().URLForResource("c", withExtension: "mp3")!
         case .Sprint:
-            return NSBundle.mainBundle().URLForResource("a2", withExtension: "mp3")
+            return NSBundle.mainBundle().URLForResource("a2", withExtension: "mp3")!
         }
     }
     

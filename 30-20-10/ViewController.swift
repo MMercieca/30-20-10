@@ -13,6 +13,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var speedLabel: UILabel!
     @IBOutlet weak var progress: CircleProgress!
     @IBOutlet weak var startStopButton: UIButton!
+    @IBOutlet weak var pauseButton: UIButton!
+    @IBOutlet weak var resumeButton: UIButton!
+    @IBOutlet weak var stopButton: UIButton!
     
     var audioPlayer = AVAudioPlayer()
     let calendar = NSCalendar.currentCalendar()
@@ -24,13 +27,19 @@ class ViewController: UIViewController {
     var currentColor = UIColor.blueColor()
     var updateInterval = 0.5
     var currentIntervalProgress = 0.0
-    var running = false;
+    var mode = Mode.Stopped
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
         
-        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, error: nil)
-        AVAudioSession.sharedInstance().setActive(true, error: nil)
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
+        } catch _ {
+        }
+        do {
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch _ {
+        }
         
         timer = NSTimer(timeInterval: updateInterval, target: self, selector: "timerFired", userInfo: nil, repeats: true)
         
@@ -38,26 +47,46 @@ class ViewController: UIViewController {
         NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSRunLoopCommonModes)
     }
     
+   
     //TODOMPM - add pausing
     //TODOMPM - add interruption
     //TODOMPM - add setting screen (number of loops and warmup)
     //TODOMPM - add finished state
     
-    @IBAction func startStopPressed(sender: UIButton) {
-        if (!running) {
-            startRunning()
-        } else {
-            stopRunning();
-        }
+    @IBAction func startPressed(sender: UIButton) {
+        mode = Mode.Running
+        resumeButton.hidden = true
+        startRunning()
     }
     
+    @IBAction func pausePressed(sender: UIButton) {
+        mode = Mode.Paused
+        pauseButton.hidden = true
+        resumeButton.hidden = false
+        stopButton.hidden = false
+    }
+    
+    @IBAction func resumePressed(sender: UIButton) {
+        mode = Mode.Running
+        resumeButton.hidden = true
+        pauseButton.hidden = false
+    }
+    
+    @IBAction func stopPressed(sender: UIButton) {
+        mode = Mode.Stopped
+        resumeButton.hidden = true
+        stopButton.hidden = true
+        pauseButton.hidden = true
+        startStopButton.hidden = false
+    }
+
     func startRunning() {
         if (self.warmup) {
             intervals.append(Speed.Warmup)
         }
         
-        for i in 1...3 {
-            for i in 1...5
+        for _ in 1...3 {
+            for _ in 1...5
             {
                 intervals.append(Speed.Jog)
                 intervals.append(Speed.Run)
@@ -68,21 +97,21 @@ class ViewController: UIViewController {
         
         total = intervals.reduce(0, combine: { $0 + $1.runFor() })
         
-        startStopButton.setTitle("Stop", forState: UIControlState.Normal)
-        running = true
+        startStopButton.hidden = true
+        pauseButton.hidden = false;
     }
     
     func stopRunning() {
         startStopButton.setTitle("Start", forState: UIControlState.Normal)
-        running = false
         currentIntervalProgress = 0.0
         intervals.removeAll(keepCapacity: false)
         progress.clear()
         speedLabel.text = "Stopped"
+        mode = Mode.Stopped
     }
     
     func timerFired() {
-        if (running) {
+        if (mode == Mode.Running) {
             updateIntervals()
             updateProgress()
         }
@@ -109,7 +138,7 @@ class ViewController: UIViewController {
     }
     
     func updateProgress() {
-        if running {
+        if mode == Mode.Running {
             if let currentInterval = intervals.first {
                 timePassed += updateInterval
                 let percent = currentIntervalProgress / currentInterval.runFor() / total * 100
@@ -119,8 +148,12 @@ class ViewController: UIViewController {
     }
     
     func alertSpeed(currentSpeed:Speed) {
-        audioPlayer = AVAudioPlayer(contentsOfURL: currentSpeed.soundUrl(), error: nil)
+        do {
+        audioPlayer = try AVAudioPlayer(contentsOfURL: currentSpeed.soundUrl())
+        audioPlayer.prepareToPlay()
         audioPlayer.play()
+        } catch {
+        }
     }
 }
 
