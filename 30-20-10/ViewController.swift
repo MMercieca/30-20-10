@@ -43,15 +43,14 @@ class ViewController: UIViewController {
         
         timer = NSTimer(timeInterval: updateInterval, target: self, selector: "timerFired", userInfo: nil, repeats: true)
         
-        //TODOMPM: this needs to work in background execution mode
+        //TODOMPM: this will likely need to be updated for background execution mode
         NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSRunLoopCommonModes)
     }
     
-   
-    //TODOMPM - add pausing
     //TODOMPM - add interruption
     //TODOMPM - add setting screen (number of loops and warmup)
     //TODOMPM - add finished state
+    //TODOMPM - Add background execution mode
     
     @IBAction func startPressed(sender: UIButton) {
         mode = Mode.Running
@@ -69,6 +68,7 @@ class ViewController: UIViewController {
     @IBAction func resumePressed(sender: UIButton) {
         mode = Mode.Running
         resumeButton.hidden = true
+        stopButton.hidden = true
         pauseButton.hidden = false
     }
     
@@ -78,6 +78,7 @@ class ViewController: UIViewController {
         stopButton.hidden = true
         pauseButton.hidden = true
         startStopButton.hidden = false
+        reset()
     }
 
     func startRunning() {
@@ -101,12 +102,11 @@ class ViewController: UIViewController {
         pauseButton.hidden = false;
     }
     
-    func stopRunning() {
-        startStopButton.setTitle("Start", forState: UIControlState.Normal)
+    func reset() {
         currentIntervalProgress = 0.0
         intervals.removeAll(keepCapacity: false)
         progress.clear()
-        speedLabel.text = "Stopped"
+        speedLabel.text = ""
         mode = Mode.Stopped
     }
     
@@ -149,10 +149,11 @@ class ViewController: UIViewController {
     
     func alertSpeed(currentSpeed:Speed) {
         do {
-        audioPlayer = try AVAudioPlayer(contentsOfURL: currentSpeed.soundUrl())
-        audioPlayer.prepareToPlay()
-        audioPlayer.play()
+            audioPlayer = try AVAudioPlayer(contentsOfURL: currentSpeed.soundUrl())
+            audioPlayer.prepareToPlay()
+            audioPlayer.play()
         } catch {
+            //Humm.  An empty catch.  Except what would I do here anyway?
         }
     }
 }
