@@ -44,6 +44,9 @@ class ViewController: UIViewController {
         timer = NSTimer(timeInterval: updateInterval, target: self, selector: "timerFired", userInfo: nil, repeats: true)
         
         NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSRunLoopCommonModes)
+        
+        // Can't do background execution mode.  So we just won't sleep.
+        UIApplication.sharedApplication().idleTimerDisabled = true;
     }
     
     //TODOMPM - Add background execution mode - it doesn't look like this app meets the criteria for background 
@@ -87,6 +90,7 @@ class ViewController: UIViewController {
     }
 
     func startRunning() {
+        progress.clear()
         if (self.warmup) {
             intervals.append(Speed.Warmup)
         }
@@ -100,8 +104,8 @@ class ViewController: UIViewController {
             }
             intervals.append(Speed.Break)
         }
-        
-        total = intervals.reduce(0, combine: { $0 + $1.runFor() })
+
+        total = intervals.reduce(0, combine: { $0 + $1.runFor() }) + updateInterval
         
         startStopButton.hidden = true
         pauseButton.hidden = false;
@@ -110,7 +114,6 @@ class ViewController: UIViewController {
     func reset() {
         currentIntervalProgress = 0.0
         intervals.removeAll(keepCapacity: false)
-        progress.clear()
         mode = Mode.Stopped
     }
     
@@ -119,6 +122,8 @@ class ViewController: UIViewController {
         alertSpeed(Speed.Jog)
         alertSpeed(Speed.Run)
         alertSpeed(Speed.Sprint)
+        pauseButton.hidden = true;
+        startStopButton.hidden = false;
         reset();
     }
     
@@ -151,9 +156,8 @@ class ViewController: UIViewController {
     
     func updateProgress() {
         if mode == Mode.Running {
-            if let currentInterval = intervals.first {
-                timePassed += updateInterval
-                let percent = currentIntervalProgress / currentInterval.runFor() / total * 100
+            if let _ = intervals.first {
+                let percent = updateInterval / total * 100
                 progress.pushUpdate(( percent, currentColor))
             } else {
                 finish()
