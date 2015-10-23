@@ -17,9 +17,9 @@
 		C10385F51B7E6B390010B021 /* a2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C10385F21B7E6B390010B021 /* a2.mp3 */; };
 		C10385F61B7E6B390010B021 /* c.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C10385F31B7E6B390010B021 /* c.mp3 */; };
 		C10385F91B7E6EF00010B021 /* Speed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10385F81B7E6EF00010B021 /* Speed.swift */; };
-		C18892781B90E33400A3909A /* CircleProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18892771B90E33400A3909A /* CircleProgress.swift */; };
 		C195C2711B9A1AD900EF82FE /* Mode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C195C2701B9A1AD900EF82FE /* Mode.swift */; };
 		C19791571BDA75B700447D11 /* finished.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C19791561BDA75B700447D11 /* finished.mp3 */; settings = {ASSET_TAGS = (); }; };
+		C19791591BDAC02F00447D11 /* CircleProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19791581BDAC02F00447D11 /* CircleProgress.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,9 +47,9 @@
 		C10385F21B7E6B390010B021 /* a2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = a2.mp3; path = sounds/a2.mp3; sourceTree = "<group>"; };
 		C10385F31B7E6B390010B021 /* c.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = c.mp3; path = sounds/c.mp3; sourceTree = "<group>"; };
 		C10385F81B7E6EF00010B021 /* Speed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Speed.swift; sourceTree = "<group>"; };
-		C18892771B90E33400A3909A /* CircleProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CircleProgress.swift; path = ../../../CircleProgress/CircleProgress/CircleProgress/CircleProgress.swift; sourceTree = "<group>"; };
 		C195C2701B9A1AD900EF82FE /* Mode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mode.swift; sourceTree = "<group>"; };
 		C19791561BDA75B700447D11 /* finished.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = finished.mp3; sourceTree = "<group>"; };
+		C19791581BDAC02F00447D11 /* CircleProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleProgress.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +99,7 @@
 				C10385DA1B7E5F730010B021 /* LaunchScreen.xib */,
 				C10385CF1B7E5F730010B021 /* Supporting Files */,
 				C10385F81B7E6EF00010B021 /* Speed.swift */,
-				C18892771B90E33400A3909A /* CircleProgress.swift */,
+				C19791581BDAC02F00447D11 /* CircleProgress.swift */,
 				C195C2701B9A1AD900EF82FE /* Mode.swift */,
 			);
 			path = "30-20-10";
@@ -249,8 +249,8 @@
 			files = (
 				C10385F91B7E6EF00010B021 /* Speed.swift in Sources */,
 				C10385D41B7E5F730010B021 /* ViewController.swift in Sources */,
+				C19791591BDAC02F00447D11 /* CircleProgress.swift in Sources */,
 				C195C2711B9A1AD900EF82FE /* Mode.swift in Sources */,
-				C18892781B90E33400A3909A /* CircleProgress.swift in Sources */,
 				C10385D21B7E5F730010B021 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
