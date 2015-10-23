@@ -16,6 +16,7 @@ enum Speed: Int {
     case Sprint = 3
     case Break = 4
     case Warmup = 5
+    case Finished = 6
     
     func description() -> String {
         switch self {
@@ -29,6 +30,8 @@ enum Speed: Int {
             return "Jog"
         case .Warmup:
             return "Warmup"
+        case .Finished:
+            return "Finished"
         }
     }
     
@@ -44,6 +47,8 @@ enum Speed: Int {
             return UIColor.blueColor()
         case .Warmup:
             return UIColor.blueColor()
+        case .Finished:
+            return UIColor.blueColor()
         }
     }
     
@@ -57,6 +62,8 @@ enum Speed: Int {
             return NSBundle.mainBundle().URLForResource("c", withExtension: "mp3")!
         case .Sprint:
             return NSBundle.mainBundle().URLForResource("a2", withExtension: "mp3")!
+        case .Finished:
+            return NSBundle.mainBundle().URLForResource("finished", withExtension: "mp3")!
         }
     }
     
@@ -72,6 +79,8 @@ enum Speed: Int {
             return 120.0
         case .Warmup:
             return 300.0
+        case .Finished:
+            return 0.0
         }
     }
 }

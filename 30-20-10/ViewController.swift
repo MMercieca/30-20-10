@@ -18,19 +18,21 @@ class ViewController: UIViewController {
     @IBOutlet weak var stopButton: UIButton!
     
     var audioPlayer = AVAudioPlayer()
-    let calendar = NSCalendar.currentCalendar()
     var warmup = false
     var timer = NSTimer()
     var intervals = [Speed]()
-    var total = 0.0
-    var timePassed = 0.0
-    var currentColor = UIColor.blueColor()
+    var totalToRun = 0.0
+    var nextAlarmTime = 0.0
+    var ellapsedTime = 0.0
+    var currentColor = Speed.Warmup.color()
     var updateInterval = 0.5
-    var currentIntervalProgress = 0.0
     var mode = Mode.Stopped
+    var lastUpdate = NSDate()
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
+        
+        mode = Mode.Stopped
         
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
@@ -45,27 +47,34 @@ class ViewController: UIViewController {
         
         NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSRunLoopCommonModes)
         
-        // Can't do background execution mode.  So we just won't sleep.
+        // Not sleeping because background execution likely requires some hacking
         UIApplication.sharedApplication().idleTimerDisabled = true;
+        
+        // Sometimes runners get phone calls at inconvenient times
+        // TODOMPM - This is where nifty code would go to get the alerting to work when the app is in the
+        //           background.  It doesn't look like this app meets the criteria for background
+        //           execution mode.
+        //           See: https://developer.apple.com/library/ios/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/BackgroundExecution/BackgroundExecution.html
+        //           I might be able to hack around it, but I'll put that on the back burner for now.
+        //           Of course, if I deliberately hack around it the app may just get rejected from the
+        //           store.
+        // TODOMPM - After trying to hack around the above, make sure interruption works correctly.
     }
     
-    //TODOMPM - Add background execution mode - it doesn't look like this app meets the criteria for background 
-    //          execution mode.  
-    //          See: https://developer.apple.com/library/ios/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/BackgroundExecution/BackgroundExecution.html
-    //          I might be able to hack around it, but I'll put that on the back burner for now.
-    //          Of course, if I deliberately hack around it the app may just get rejected from the app store.
-    //TODOMPM - add interruption - App can't run in background so this likely isn't necessary
-    //TODOMPM - add setting screen (number of loops and warmup)
-    //TODOMPM - test finished state
-    
+    //TODOMOM - Add settings screen
     
     @IBAction func startPressed(sender: UIButton) {
         mode = Mode.Running
+        lastUpdate = NSDate()
         resumeButton.hidden = true
         startRunning()
     }
     
     @IBAction func pausePressed(sender: UIButton) {
+        pauseRunning()
+    }
+    
+    func pauseRunning() {
         mode = Mode.Paused
         pauseButton.hidden = true
         resumeButton.hidden = false
@@ -73,6 +82,11 @@ class ViewController: UIViewController {
     }
     
     @IBAction func resumePressed(sender: UIButton) {
+        resumeRunning()
+    }
+    
+    func resumeRunning() {
+        lastUpdate = NSDate()
         mode = Mode.Running
         resumeButton.hidden = true
         stopButton.hidden = true
@@ -91,6 +105,7 @@ class ViewController: UIViewController {
 
     func startRunning() {
         progress.clear()
+        
         if (self.warmup) {
             intervals.append(Speed.Warmup)
         }
@@ -104,60 +119,59 @@ class ViewController: UIViewController {
             }
             intervals.append(Speed.Break)
         }
+        intervals.append(Speed.Finished)
 
-        total = intervals.reduce(0, combine: { $0 + $1.runFor() }) + updateInterval
-        
+        totalToRun = intervals.reduce(0, combine: { $0 + $1.runFor() })
         startStopButton.hidden = true
         pauseButton.hidden = false;
+        alert()
+    }
+    
+    func alert() {
+        if let currentInterval = intervals.first {
+            currentColor = currentInterval.color()
+            speedLabel.text = currentInterval.description()
+            alertSpeed(currentInterval)
+            nextAlarmTime += currentInterval.runFor()
+            intervals.removeAtIndex(0)
+        }
     }
     
     func reset() {
-        currentIntervalProgress = 0.0
+        nextAlarmTime = 0.0
         intervals.removeAll(keepCapacity: false)
         mode = Mode.Stopped
     }
     
     func finish() {
-        speedLabel.text = "Finished"
-        alertSpeed(Speed.Jog)
-        alertSpeed(Speed.Run)
-        alertSpeed(Speed.Sprint)
         pauseButton.hidden = true;
         startStopButton.hidden = false;
-        reset();
+       // reset();
     }
     
     func timerFired() {
         if (mode == Mode.Running) {
             updateIntervals()
-            updateProgress()
         }
     }
     
     func updateIntervals() {
-        if (intervals.count == 0) {
-            return;
+        let now = NSDate()
+        let thisSlice = now.timeIntervalSinceDate(lastUpdate)
+        updateProgress(thisSlice)
+        ellapsedTime += thisSlice
+        
+        if ellapsedTime >= nextAlarmTime {
+            alert()
         }
         
-        let currentInterval = intervals.first!
-        
-        if currentIntervalProgress == 0.0 {
-            currentColor = currentInterval.color()
-            speedLabel.text = currentInterval.description()
-            alertSpeed(currentInterval)
-            currentIntervalProgress += updateInterval
-        } else if currentIntervalProgress > currentInterval.runFor() {
-            currentIntervalProgress = 0.0
-            intervals.removeAtIndex(0)
-        } else {
-            currentIntervalProgress += updateInterval
-        }
+        lastUpdate = now
     }
     
-    func updateProgress() {
+    func updateProgress(elapsed:NSTimeInterval) {
         if mode == Mode.Running {
             if let _ = intervals.first {
-                let percent = updateInterval / total * 100
+                let percent = elapsed / totalToRun * 100
                 progress.pushUpdate(( percent, currentColor))
             } else {
                 finish()
