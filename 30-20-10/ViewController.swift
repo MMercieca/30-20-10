@@ -48,7 +48,7 @@ class ViewController: UIViewController {
         NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSRunLoopCommonModes)
         
         // Not sleeping because background execution likely requires some hacking
-        UIApplication.sharedApplication().idleTimerDisabled = true;
+        UIApplication.sharedApplication().idleTimerDisabled = true
         
         // Sometimes runners get phone calls at inconvenient times
         // TODOMPM - This is where nifty code would go to get the alerting to work when the app is in the
@@ -115,7 +115,7 @@ class ViewController: UIViewController {
 
         totalToRun = intervals.reduce(0, combine: { $0 + $1.runFor() })
         startStopButton.hidden = true
-        pauseButton.hidden = false;
+        pauseButton.hidden = false
         alert()
     }
     
@@ -136,8 +136,8 @@ class ViewController: UIViewController {
     }
     
     func finish() {
-        pauseButton.hidden = true;
-        startStopButton.hidden = false;
+        pauseButton.hidden = true
+        startStopButton.hidden = false
     }
     
     func timerFired() {
