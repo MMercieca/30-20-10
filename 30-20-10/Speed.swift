@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 Mutually Human. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 enum Speed {
