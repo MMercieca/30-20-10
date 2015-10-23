@@ -71,10 +71,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func pausePressed(sender: UIButton) {
-        pauseRunning()
-    }
-    
-    func pauseRunning() {
         mode = Mode.Paused
         pauseButton.hidden = true
         resumeButton.hidden = false
@@ -82,10 +78,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func resumePressed(sender: UIButton) {
-        resumeRunning()
-    }
-    
-    func resumeRunning() {
         lastUpdate = NSDate()
         mode = Mode.Running
         resumeButton.hidden = true
@@ -146,7 +138,6 @@ class ViewController: UIViewController {
     func finish() {
         pauseButton.hidden = true;
         startStopButton.hidden = false;
-       // reset();
     }
     
     func timerFired() {
