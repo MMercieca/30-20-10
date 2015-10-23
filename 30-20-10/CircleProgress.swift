@@ -20,7 +20,7 @@ class CircleProgress: UIView {
     var currentColor = UIColor.grayColor()
     
     var progressCenter: CGPoint {
-        return convertPoint(center, fromView: superview);
+        return convertPoint(center, fromView: superview)
     }
     
     var progressRadius: CGFloat {
@@ -41,7 +41,7 @@ class CircleProgress: UIView {
         if segments.count == 0 {
             currentColor = newValue.1
             segments.append(newValue)
-            return;
+            return
         }
         
         if (newValue.1 == currentColor) {
