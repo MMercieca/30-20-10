@@ -9,14 +9,14 @@
 import Foundation
 import UIKit
 
-enum Speed: Int {
+enum Speed {
     
-    case Jog = 1
-    case Run = 2
-    case Sprint = 3
-    case Break = 4
-    case Warmup = 5
-    case Finished = 6
+    case Jog
+    case Run
+    case Sprint
+    case Break
+    case Warmup
+    case Finished
     
     func description() -> String {
         switch self {

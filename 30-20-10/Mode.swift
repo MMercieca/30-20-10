@@ -8,8 +8,8 @@
 
 import Foundation
 
-enum Mode: Int {
-    case Stopped = 0
-    case Running = 1
-    case Paused = 2
+enum Mode {
+    case Stopped
+    case Running
+    case Paused
 }
